@@ -42,14 +42,14 @@ public class PersonController {
     }
 
     @PutMapping("/put/{id}")
-    public ResponseEntity<?> putPerson(@PathVariable Long id, @RequestBody PersonEntity persona) {
+    public ResponseEntity<PersonEntity> putPerson(@PathVariable Long id, @RequestBody PersonEntity persona) {
         Optional<PersonEntity> personaDb = iPersonService.findById(id);
 
         return new ResponseEntity<>(iPersonService.putPerson(persona, personaDb), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deletePerson(@PathVariable Long id) {
+    public ResponseEntity<String> deletePerson(@PathVariable Long id) {
       iPersonService.deleteFinfId(id);
       return new ResponseEntity<>("Delete Person in Db whit code " + id, HttpStatus.OK);
     }
