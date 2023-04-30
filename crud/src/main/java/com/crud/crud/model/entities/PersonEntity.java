@@ -1,7 +1,9 @@
 package com.crud.crud.model.entities;
 
-import jakarta.persistence.*;
+
 import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
 @Data
