@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class PersonController {
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/put/{id}")
     public ResponseEntity<PersonEntity> putPerson(@PathVariable Long id, @RequestBody PersonEntity persona) {
         Optional<PersonEntity> personaDb = iPersonService.findById(id);
@@ -48,6 +50,7 @@ public class PersonController {
         return new ResponseEntity<>(iPersonService.putPerson(persona, personaDb), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletePerson(@PathVariable Long id) {
       iPersonService.deleteFinfId(id);
