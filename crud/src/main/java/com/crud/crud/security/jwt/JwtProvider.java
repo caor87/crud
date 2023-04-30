@@ -2,6 +2,7 @@ package com.crud.crud.security.jwt;
 
 import com.crud.crud.security.entity.PrincipalUser;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,7 @@ import java.util.Date;
  * Esta clase genera el token
  * posee un metodo de validacion, que el token no este expirado
  */
-
+@Slf4j
 @Component
 public class JwtProvider {
     private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
@@ -35,17 +36,17 @@ public class JwtProvider {
     }
 
     public String getUserNameFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJwt(token);
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Bad formed token");
         } catch (UnsupportedJwtException e) {
-            logger.error("Not soported token");
+            logger.error("Not soported token " + e.getMessage());
         } catch (ExpiredJwtException e) {
             logger.error("Expired token");
         } catch (IllegalArgumentException e) {
